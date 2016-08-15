@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<database>
+    <element label="Event Participant Management" max_length="40" name="x_43326_event_part_event_participant_management" type="collection">
+        <element label="Name" max_length="40" name="name" type="string"/>
+        <element choice="1" default="no" label="Participate" max_length="40" name="participate" type="choice">
+            <choice>
+                <element label="Yes" sequence="100" value="yes"/>
+                <element label="Maybe" sequence="200" value="maybe"/>
+                <element label="No" sequence="300" value="no"/>
+            </choice>
+        </element>
+        <element label="User" max_length="32" name="user" reference="sys_user" type="reference"/>
+        <index name="index">
+            <element name="user"/>
+        </index>
+    </element>
+</database>

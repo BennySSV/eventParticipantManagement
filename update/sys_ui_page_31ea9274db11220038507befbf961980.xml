@@ -1,0 +1,67 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<record_update table="sys_ui_page">
+    <sys_ui_page action="INSERT_OR_UPDATE">
+        <category>general</category>
+        <client_script><![CDATA[/**
+ * Event handler for when selected Event changes
+ */
+function onChangeEvent() {
+	//selected Event ID from dropdown
+	var selEvent = gel("event").value;
+	//ID of current user	
+	var currentUser = g_user.userID;
+
+	//ajax call with selected event and current user, response is a string of previous participation answer, if there is no previous entry it is set to "No"
+	var ajax = new GlideAjax('EventParticipantManagementAJAX');  
+	ajax.addParam('sysparm_name', 'getPreviousAnswer');
+	ajax.addParam('sysparm_event', selEvent);  
+	ajax.addParam('sysparm_user', currentUser);  
+	ajax.getXML(previousAnswerResponse);	
+	
+}
+//writes response to input field
+function previousAnswerResponse(response){  
+	var answer = response.responseXML.documentElement.getAttribute("answer");		
+	var eventAnswer = gel("event_answer");
+	eventAnswer.value = answer;
+}
+
+/**
+ * Event handler for when save Button is clicked
+ */
+function saveAnswer(){
+	var currentUser = g_user.userID;
+	var selEvent = gel("event").value;
+	var eventAnswer = gel("event_answer").value;
+	
+	//ajax call with selected event, current user and selected Answer. Entry is updated, if existant, or a new entry is created
+	var ajax = new GlideAjax('EventParticipantManagementAJAX');  
+	ajax.addParam('sysparm_name', 'setEventAnswer');
+	ajax.addParam('sysparm_event', selEvent);  
+	ajax.addParam('sysparm_user', currentUser);
+	ajax.addParam('sysparm_eventAnswer', eventAnswer);
+	ajax.getXML();	
+}
+]]></client_script>
+        <description>adds or edits entry in u_event_participant_management table</description>
+        <direct>false</direct>
+        <endpoint>x_43326_event_part_event_participate.do</endpoint>
+        <html><![CDATA[<g:macro_invoke macro="x_43326_event_part_ui_event_participate" />]]></html>
+        <name>event_participate</name>
+        <processing_script/>
+        <sys_class_name>sys_ui_page</sys_class_name>
+        <sys_created_by>admin</sys_created_by>
+        <sys_created_on>2016-08-15 08:26:11</sys_created_on>
+        <sys_customer_update>true</sys_customer_update>
+        <sys_id>31ea9274db11220038507befbf961980</sys_id>
+        <sys_mod_count>11</sys_mod_count>
+        <sys_name>event_participate</sys_name>
+        <sys_package display_value="Event Participant Management" source="x_43326_event_part">09131a30db11220038507befbf961912</sys_package>
+        <sys_policy/>
+        <sys_replace_on_upgrade>false</sys_replace_on_upgrade>
+        <sys_scope display_value="Event Participant Management">09131a30db11220038507befbf961912</sys_scope>
+        <sys_update_name>sys_ui_page_31ea9274db11220038507befbf961980</sys_update_name>
+        <sys_updated_by>admin</sys_updated_by>
+        <sys_updated_on>2016-08-15 08:45:03</sys_updated_on>
+    </sys_ui_page>
+</record_update>

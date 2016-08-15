@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<record_update table="sys_ui_macro">
+    <sys_ui_macro action="INSERT_OR_UPDATE">
+        <active>true</active>
+        <category>general</category>
+        <description/>
+        <media_type/>
+        <name>ui_show_participants</name>
+        <scoped_name>x_43326_event_part_ui_show_participants</scoped_name>
+        <sys_class_name>sys_ui_macro</sys_class_name>
+        <sys_created_by>admin</sys_created_by>
+        <sys_created_on>2016-08-15 08:57:36</sys_created_on>
+        <sys_customer_update>true</sys_customer_update>
+        <sys_id>ce82e6b4db11220038507befbf961965</sys_id>
+        <sys_mod_count>0</sys_mod_count>
+        <sys_name>ui_show_participants</sys_name>
+        <sys_package display_value="Event Participant Management" source="x_43326_event_part">09131a30db11220038507befbf961912</sys_package>
+        <sys_policy/>
+        <sys_replace_on_upgrade>false</sys_replace_on_upgrade>
+        <sys_scope display_value="Event Participant Management">09131a30db11220038507befbf961912</sys_scope>
+        <sys_update_name>sys_ui_macro_ce82e6b4db11220038507befbf961965</sys_update_name>
+        <sys_updated_by>admin</sys_updated_by>
+        <sys_updated_on>2016-08-15 08:57:36</sys_updated_on>
+        <xml><![CDATA[<?xml version="1.0" encoding="utf-8" ?>
+<j:jelly trim="false" xmlns:j="jelly:core" xmlns:g="glide" xmlns:j2="null" xmlns:g2="null">
+<g:evaluate var="jvar_myEvents" object="true">
+	var eventGR = new GlideAggregate('x_43326_event_part_event_participant_management');
+	eventGR.groupBy('u_event');
+	eventGR.query();
+	
+	var eventChoices = new GlideChoiceList();
+	
+	while(eventGR.next()){ 
+   	    eventChoices.add(new GlideChoice(eventGR.name, eventGR.name));
+	} 
+	eventChoices;
+	
+</g:evaluate>
+
+<g:ui_form>
+	<div class="navbar navbar-default section_zero">
+		${gs.getMessage("Event Participation")}
+	</div>
+	<div class="section-content form-horizontal">
+		<div class="row">
+			<div class="vsplit col-sm-6">
+				<div id="element.event" class="form-group">
+					<div type="choice">
+						<label id="label.event" class="col-xs-12 col-md-3 col-lg-4 control-label" for="event">
+							<span class="label-text">${gs.getMessage("Select Event")}</span>
+						</label>
+					</div>
+					<div class="col-xs-10 col-sm-9 col-md-6 col-lg-5 form-field input_controls">
+						<select id="event" onchange="onChangeEvent();" name="event" class="form-control">
+							<option selected="true" disabled="true" hidden="true" style='display: none' value=''></option>
+							<g:options choiceList="${jvar_myEvents}" />
+						</select>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="section-content form-horizontal">
+		<div class="row">
+			<div class="vsplit col-sm-6">
+				<div id="element.event_answer" class="form-group">
+					<div type="choice">
+						<label id="label.event_response" class="col-xs-12 col-md-3 col-lg-4 control-label" for="event_response">
+							<span class="label-text">${gs.getMessage("Responses:")}</span>
+						</label>
+					</div>
+					<div class="col-xs-10 col-sm-9 col-md-6 col-lg-5 form-field input_controls">						
+						<input type="text" id="event_response" disabled="true" value="" />						
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div>
+		<button type="submit" onclick="showParticipantsTable();">${gs.getMessage("Show Participants Table")}</button>
+	</div>
+</g:ui_form>
+</j:jelly>]]></xml>
+    </sys_ui_macro>
+</record_update>

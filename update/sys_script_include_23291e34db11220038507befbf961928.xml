@@ -1,0 +1,95 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<record_update table="sys_script_include">
+    <sys_script_include action="INSERT_OR_UPDATE">
+        <access>package_private</access>
+        <active>true</active>
+        <api_name>x_43326_event_part.EventParticipantManagementAJAX</api_name>
+        <client_callable>true</client_callable>
+        <description>Ajax function for event participant management</description>
+        <name>EventParticipantManagementAJAX</name>
+        <script><![CDATA[var EventParticipantManagementAJAX = Class.create();
+EventParticipantManagementAJAX.prototype = Object.extendsObject(global.AbstractAjaxProcessor, { 
+	
+    getAnswerCount: function(){  
+		var eventResponses = "";
+		var selEvent = this.getParameter('sysparm_event');
+		
+		var eventEntry = new GlideAggregate('x_43326_event_part_event_participant_management'); 
+		eventEntry.addQuery('name', selEvent);
+		eventEntry.addAggregate('COUNT', 'participate');	
+		eventEntry.query();
+			
+		while (eventEntry.next()){
+			eventResponses += eventEntry.participate + ": " +eventEntry.getAggregate('COUNT', 'participate') + '     ';		
+		}
+		
+		return eventResponses;
+		
+	}, 
+	
+	
+	getPreviousAnswer: function(){
+		var selEvent = this.getParameter('sysparm_event');
+		var currentUser = this.getParameter('sysparm_user');
+		
+		//get the Entry of the selected Event and the current User
+		var eventEntry = new GlideRecord('x_43326_event_part_event_participant_management');
+		eventEntry.addQuery('name', selEvent);
+		eventEntry.addQuery('user', currentUser);
+		eventEntry.setLimit(1);
+		eventEntry.query();
+		
+		var previousAnswer = "no";
+		//if an Entry exists, the previous answer is selected in dropdown menu, if not, "No" is selected
+		if (eventEntry.next()){
+			previousAnswer = eventEntry.participate;		
+		}
+		return previousAnswer;
+	},
+	
+	setEventAnswer: function(){
+		var selEvent = this.getParameter('sysparm_event');
+		var currentUser = this.getParameter('sysparm_user');
+		var eventAnswer = this.getParameter('sysparm_eventAnswer');
+		
+		//get matching Entry for current user and selected Event
+		var eventEntry = new GlideRecord('x_43326_event_part_event_participant_management');
+		eventEntry.addQuery('name', selEvent);
+		eventEntry.addQuery('user', currentUser);
+		eventEntry.setLimit(1);
+		eventEntry.query();
+		//if entry exists, update Participate field
+		if (eventEntry.next()){
+			eventEntry.participate = eventAnswer;		
+			eventEntry.update();
+		}
+		//if no Entry exists, create new Entry for current User, selected Event and Participation field
+		else
+		{		
+			eventEntry.initialize(); 
+			eventEntry.user = currentUser; 
+			eventEntry.name = selEvent;
+			eventEntry.participate = eventAnswer; 
+			eventEntry.insert();	
+		}
+		
+	},
+
+    type: 'EventParticipantManagementAJAX'
+});]]></script>
+        <sys_class_name>sys_script_include</sys_class_name>
+        <sys_created_by>admin</sys_created_by>
+        <sys_created_on>2016-08-15 08:17:33</sys_created_on>
+        <sys_customer_update>true</sys_customer_update>
+        <sys_id>23291e34db11220038507befbf961928</sys_id>
+        <sys_mod_count>4</sys_mod_count>
+        <sys_name>EventParticipantManagementAJAX</sys_name>
+        <sys_package display_value="Event Participant Management" source="x_43326_event_part">09131a30db11220038507befbf961912</sys_package>
+        <sys_policy>read</sys_policy>
+        <sys_replace_on_upgrade>false</sys_replace_on_upgrade>
+        <sys_scope display_value="Event Participant Management">09131a30db11220038507befbf961912</sys_scope>
+        <sys_update_name>sys_script_include_23291e34db11220038507befbf961928</sys_update_name>
+        <sys_updated_by>admin</sys_updated_by>
+        <sys_updated_on>2016-08-15 08:49:29</sys_updated_on>
+    </sys_script_include>
+</record_update>
